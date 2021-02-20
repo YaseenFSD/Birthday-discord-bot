@@ -1,0 +1,15 @@
+{
+  "name": "oinky-bot",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "YaseenFSD",
+  "license": "MIT",
+  "dependencies": {
+    "bufferutil": "^4.0.3",
+    "discord.js": "^12.5.1",
+    "dotenv": "^8.2.0",
+    "esm": "^3.2.25",
+    "mongodb": "^3.6.4",
+    "mongoose": "^5.11.17"
+  }
+}
