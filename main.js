@@ -1,6 +1,7 @@
 import Discord from "discord.js"
 import config from "./config"
 import fs from "fs"
+import mongoose from "mongoose"
 
 const { prefix } = config
 
@@ -16,8 +17,8 @@ for (const file of commandFiles) {
 }
 
 const startServer = async () => {
-    // Mongoose connection should start here
-
+    await mongoose.connect(config.mongoURL, { useFindAndModify:false, useNewUrlParser: true, useUnifiedTopology: true })
+    // console.log(mongoClient)
 
     client.once("ready", () => {
         console.log("Ready!")
@@ -38,7 +39,7 @@ const startServer = async () => {
             message.reply(`An error has occured trying to execute command of ${command}`)
         }
 
-        
+
     })
 
     client.login(config.token)
