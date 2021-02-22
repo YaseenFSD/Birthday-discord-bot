@@ -6,9 +6,9 @@ const getUpcomingBday = (month, day) => {
     const currentTimestamp = currentDate.getTime()
     const bdayTime = new Date(currentYear, month - 1, day, 21).getTime()
     // * 21 (hours) is equivalent to 9 pm UTC
-    
-    if (currentTimestamp > bdayTime){
-        return new Date(currentYear + 1, month - 1, day,  21).getTime()
+
+    if (currentTimestamp > bdayTime) {
+        return new Date(currentYear + 1, month - 1, day, 21).getTime()
     } else {
         return bdayTime
     }
@@ -22,6 +22,11 @@ export default {
         if (args[0] === "-h" || args[0] == "--help") {
             return message.channel.send(this.help())
         }
+        const botExists = await BotModel.exists({ _id: message.guild.id })
+        if (!botExists) {
+            return message.channel.send("Error: Bot has not been activated.")
+        }
+
         let month, day, year
         try {
             [month, day, year = 0] = args[0].split("/").map((num) => parseInt(num))
@@ -35,11 +40,10 @@ export default {
             return message.channel.send("Error: Invalid format or input")
         }
 
-        // const upcomingBday = 
-        
+
         const yearExists = year > 0 ? true : false
-        const newBirthday = new BirthdayModel({
-            _id: message.author.id,
+        const Birthday = new BirthdayModel({
+            memberId: message.author.id,
             memberName: message.author.name,
             birthYear: {
                 hasYear: yearExists,
@@ -47,8 +51,13 @@ export default {
             },
             date: getUpcomingBday(month, day)
         })
-        // await BotModel.findOneAndUpdate()
-        message.channel.send(`month: ${typeof month} day:${typeof day} year:${typeof year}`)
+
+        const GuildBot = await BotModel.findById(message.guild.id)
+
+        Birthday.save()
+        GuildBot.birthdays.push(Birthday)
+        GuildBot.save()
+        message.reply("Birthday added!")
 
     }
 }

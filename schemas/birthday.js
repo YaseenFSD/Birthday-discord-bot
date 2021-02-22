@@ -3,7 +3,7 @@ import { Double, Timestamp } from "mongodb"
 import { model, Schema } from "mongoose"
 
 const birthdaySchema = new Schema({
-    _id: Number,
+    memberId: Number,
     memberName: String,
     birthYear: {
         hasYear: Boolean,
