@@ -6,38 +6,39 @@ export default {
     help: function () { return `Command: activate \n\n Args:\tTakes no arguments\n\nDescription:\n\t${this.description}` },
     execute: async function (message, args) {
         if (args[0] === "-h" || args[0] == "--help") {
-            message.channel.send(this.help())
+            return message.channel.send(this.help())
         }
-        else if (message.guild.ownerID === message.author.id) {
-            const BotData = await BotModel.exists({ _id: message.guild.id })
-            if (!BotData) {
-                try {
-                    await BotModel.create({
-                        _id: message.guild.id,
+        if (message.guild.ownerID !== message.author.id) {
+            return
+        }
+        const BotData = await BotModel.exists({ _id: message.guild.id })
+        if (!BotData) {
+            try {
+                await BotModel.create({
+                    _id: message.guild.id,
+                    activatedChannelId: message.channel.id,
+                    guildName: message.guild.name,
+                    channelName: message.channel.name
+                })
+                return message.channel.send(`Bot activated in '${message.channel.name}' channel`)
+
+            } catch (error) {
+                console.log(error)
+                return message.channel.send("Error: Failed to create bot")
+            }
+        } else {
+            try {
+                await BotModel.findOneAndUpdate({ _id: message.guild.id },
+                    {
                         activatedChannelId: message.channel.id,
-                        guildName: message.guild.name,
-                        channelName: message.channel.name
-                    })
-                    return message.channel.send(`Bot activated in '${message.channel.name}' channel`)
+                        channelName: message.channel.name,
+                    }
+                )
+                return message.channel.send(`Updated channel to '${message.channel.name}'`)
 
-                } catch (error) {
-                    console.log(error)
-                    return message.channel.send("Failed to create bot")
-                }
-            } else {
-                try {
-                    await BotModel.findOneAndUpdate({ _id: message.guild.id },
-                        {
-                            activatedChannelId: message.channel.id,
-                            channelName: message.channel.name,
-                        }
-                    )
-                    return message.channel.send(`Updated channel to '${message.channel.name}'`)
-
-                } catch (error) {
-                    console.log(error)
-                    return message.channel.send("Failed to update activated channel")
-                }
+            } catch (error) {
+                console.log(error)
+                return message.channel.send("Error: Failed to update activated channel")
             }
         }
     }
