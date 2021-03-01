@@ -1,11 +1,11 @@
 import { model, Schema } from "mongoose"
 
 const BotSchema = new Schema({
-    _id: Number,
-    activatedChannelId: Number,
+    _id: String,
+    activatedChannelId: String,
     guildName: String,
     channelName: String,
-    birthdays: [{ type: Schema.Types.ObjectId, ref: "Birthday" }]
+    birthdays: [{ type: Number, ref: "Birthday" }]
 })
 
 export const BotModel = model("Bot", BotSchema)

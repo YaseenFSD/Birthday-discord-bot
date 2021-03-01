@@ -1,9 +1,8 @@
-import { SnowflakeUtil } from "discord.js"
-import { Double, Timestamp } from "mongodb"
 import { model, Schema } from "mongoose"
 
 const birthdaySchema = new Schema({
-    memberId: Number,
+    // change _id to String to prevent errors
+    _id: Number,
     memberName: String,
     birthYear: {
         hasYear: Boolean,

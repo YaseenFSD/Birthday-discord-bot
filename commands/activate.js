@@ -11,9 +11,11 @@ export default {
         if (message.guild.ownerID !== message.author.id) {
             return
         }
+        debugger
         const BotData = await BotModel.exists({ _id: message.guild.id })
         if (!BotData) {
             try {
+                console.log(message.guild.id)
                 await BotModel.create({
                     _id: message.guild.id,
                     activatedChannelId: message.channel.id,
@@ -23,7 +25,7 @@ export default {
                 return message.channel.send(`Bot activated in '${message.channel.name}' channel`)
 
             } catch (error) {
-                console.log(error)
+                console.error(error)
                 return message.channel.send("Error: Failed to create bot")
             }
         } else {
@@ -37,7 +39,7 @@ export default {
                 return message.channel.send(`Updated channel to '${message.channel.name}'`)
 
             } catch (error) {
-                console.log(error)
+                console.error(error)
                 return message.channel.send("Error: Failed to update activated channel")
             }
         }

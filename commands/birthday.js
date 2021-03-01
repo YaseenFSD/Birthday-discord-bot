@@ -43,7 +43,7 @@ export default {
 
         const yearExists = year > 0 ? true : false
         const Birthday = new BirthdayModel({
-            memberId: message.author.id,
+            _id: message.author.id,
             memberName: message.author.name,
             birthYear: {
                 hasYear: yearExists,
@@ -52,12 +52,27 @@ export default {
             date: getUpcomingBday(month, day)
         })
 
+        const birthdayExists = await BirthdayModel.exists({ _id: message.author.id })
+        if (birthdayExists) {
+            // Update birthday document if exists
+            await BirthdayModel.updateOne({ _id: message.author.id }, Birthday)
+            message.reply("Birthday updated")
+        } else {
+            // Save birthday if it doesn't exist
+            Birthday.save()
+            message.reply("Birthday added")
+        }
+
+
         const GuildBot = await BotModel.findById(message.guild.id)
 
-        Birthday.save()
-        GuildBot.birthdays.push(Birthday)
-        GuildBot.save()
-        message.reply("Birthday added!")
+        if (!GuildBot.birthdays.includes(message.author.id)) {
+            // If birthdays is not stored in the Bot Document, then save it
+            GuildBot.birthdays.push(Birthday)
+            GuildBot.save()
+        }
+
+        // message.reply("Birthday added!")
 
     }
 }
