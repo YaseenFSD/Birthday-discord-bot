@@ -4,11 +4,10 @@ const getUpcomingBday = (month, day) => {
     const currentDate = new Date()
     const currentYear = currentDate.getUTCFullYear()
     const currentTimestamp = currentDate.getTime()
-    const bdayTime = new Date(currentYear, month - 1, day, 21).getTime()
-    // * 21 (hours) is equivalent to 9 pm UTC
+    const bdayTime = new Date(currentYear, month - 1, day).getTime()
 
     if (currentTimestamp > bdayTime) {
-        return new Date(currentYear + 1, month - 1, day, 21).getTime()
+        return new Date(currentYear + 1, month - 1, day).getTime()
     } else {
         return bdayTime
     }
@@ -72,7 +71,6 @@ export default {
             GuildBot.save()
         }
 
-        // message.reply("Birthday added!")
 
     }
 }

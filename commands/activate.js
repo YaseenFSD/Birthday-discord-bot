@@ -14,7 +14,6 @@ export default {
         const BotData = await BotModel.exists({ _id: message.guild.id })
         if (!BotData) {
             try {
-                // console.log(message.guild.id)
                 await BotModel.create({
                     _id: message.guild.id,
                     activatedChannelId: message.channel.id,

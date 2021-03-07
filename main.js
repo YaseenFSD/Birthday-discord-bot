@@ -14,13 +14,11 @@ const commandFiles = fs.readdirSync('./commands').filter((file) => file.endsWith
 
 for (const file of commandFiles) {
     const command = require(`./commands/${file}`).default
-    // console.log(command)
     client.commands.set(command.name, command)
 }
 
 const startServer = async () => {
     await mongoose.connect(config.mongoURL, { useFindAndModify: false, useNewUrlParser: true, useUnifiedTopology: true })
-    // console.log(mongoClient)
     
     client.once("ready", () => {
         console.log("Ready!")
