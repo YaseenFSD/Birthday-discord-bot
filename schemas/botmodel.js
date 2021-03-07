@@ -5,7 +5,7 @@ const BotSchema = new Schema({
     activatedChannelId: String,
     guildName: String,
     channelName: String,
-    birthdays: [{ type: Number, ref: "Birthday" }]
+    birthdays: [{ type: String, ref: "Birthday" }]
 })
 
 export const BotModel = model("Bot", BotSchema)

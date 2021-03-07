@@ -11,11 +11,10 @@ export default {
         if (message.guild.ownerID !== message.author.id) {
             return
         }
-        debugger
         const BotData = await BotModel.exists({ _id: message.guild.id })
         if (!BotData) {
             try {
-                console.log(message.guild.id)
+                // console.log(message.guild.id)
                 await BotModel.create({
                     _id: message.guild.id,
                     activatedChannelId: message.channel.id,
