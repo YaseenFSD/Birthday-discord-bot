@@ -51,8 +51,11 @@ const startServer = async () => {
     client.on('guildMemberRemove', async (member) => {
         // Remove member from the guild "birthdays" array when that member leaves the guild
         const guildBot = await BotModel.findById(member.guild.id)
-        guildBot.birthdays.pop(guildBot.birthdays.indexOf(member.id))
-        guildBot.save()
+        const leftUserIndex = guildBot.birthdays.indexOf(member.id)
+        if (leftUserIndex !== -1){
+            guildBot.birthdays.pop(guildBot.birthdays.indexOf(member.id))
+            guildBot.save()
+        }
     })
 
     client.login(config.token)
@@ -64,7 +67,6 @@ try {
 
 } catch (err) {
     console.log(`Server unable to start ${err}`)
-
 }
 
 
